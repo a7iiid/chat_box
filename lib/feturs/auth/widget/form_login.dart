@@ -1,7 +1,10 @@
-import 'package:chat_app/core/utils/app_style.dart';
+import 'package:chat_app/core/utils/router/routs.dart';
+import 'package:chat_app/feturs/auth/data/auth_user.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'coustom_text_form_filde.dart';
+import 'custom_bottom.dart';
 
 class FormLogin extends StatefulWidget {
   const FormLogin({super.key});
@@ -48,7 +51,17 @@ class _FormLoginState extends State<FormLogin> {
               ),
               const Expanded(child: SizedBox()),
               CustomBottom(
-                formKey: _formKey,
+                func: () async {
+                  String respons =
+                      await AuthUser.logIn(email.text, passowrd.text);
+
+                  if (_formKey.currentState!.validate()) {
+                    GoRouter.of(context).pushReplacement(Routes.kHomePage);
+                  }
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(respons)),
+                  );
+                },
                 text: "Log In",
               ),
               const SizedBox(
@@ -62,39 +75,5 @@ class _FormLoginState extends State<FormLogin> {
             ],
           ),
         ));
-  }
-}
-
-class CustomBottom extends StatelessWidget {
-  const CustomBottom(
-      {super.key, required GlobalKey<FormState> formKey, required this.text})
-      : _formKey = formKey;
-
-  final GlobalKey<FormState> _formKey;
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        if (_formKey.currentState!.validate()) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Log In')),
-          );
-        }
-      },
-      child: Container(
-        height: 48,
-        width: MediaQuery.sizeOf(context).width,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15), color: Color(0xff24786D)),
-        child: Center(
-          child: Text(
-            text,
-            style: AppStyle.bold16,
-          ),
-        ),
-      ),
-    );
   }
 }
