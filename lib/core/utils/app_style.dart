@@ -15,7 +15,6 @@ class AppStyle {
     fontSize: 14,
     fontFamily: 'Circular Std',
     fontWeight: FontWeight.w400,
-    height: 0.10,
     letterSpacing: 0.10,
   );
 

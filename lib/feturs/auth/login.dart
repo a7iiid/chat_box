@@ -4,6 +4,7 @@ import 'package:chat_app/feturs/auth/widget/social_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'widget/deviders.dart';
 import 'widget/social_login.dart';
 
 class Login extends StatelessWidget {
@@ -29,10 +30,9 @@ class Login extends StatelessWidget {
                 height: 20,
               ),
               Text(
-                '''Welcome back! Sign in using your social account
-                 or email to continue us''',
+                '''Welcome back! Sign in using your social account or email to continue us''',
                 style: AppStyle.scondaryText,
-                maxLines: 2,
+                textAlign: TextAlign.center, // Ensure text is centered
               ),
               SizedBox(
                 height: 38,
@@ -45,52 +45,6 @@ class Login extends StatelessWidget {
               ),
               Deviders()
             ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class Deviders extends StatelessWidget {
-  const Deviders({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Line(),
-        Text(
-          "OR",
-          style: AppStyle.scondaryText,
-        ),
-        Line(),
-      ],
-    );
-  }
-}
-
-class Line extends StatelessWidget {
-  const Line({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Opacity(
-      opacity: 0.50,
-      child: Container(
-        width: 132,
-        decoration: const ShapeDecoration(
-          shape: RoundedRectangleBorder(
-            side: BorderSide(
-              width: 1,
-              strokeAlign: BorderSide.strokeAlignCenter,
-              color: Color(0xFFCDD1D0),
-            ),
           ),
         ),
       ),
