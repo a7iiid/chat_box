@@ -35,20 +35,19 @@ class _SplashBodyState extends State<SplashBody> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: SizeTransition(
-        sizeFactor: _animation,
+    return SizeTransition(
+      sizeFactor: _animation,
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SvgPicture.asset(
               Assets.imageLogo,
             ),
-            SizedBox(
+            const SizedBox(
               height: 13,
             ),
-            Text(
+            const Text(
               "Chatbox",
               style: AppStyle.Bolde40,
             )
