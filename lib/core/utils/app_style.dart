@@ -52,7 +52,6 @@ class AppStyle {
     fontSize: 20,
     fontFamily: 'Caros',
     fontWeight: FontWeight.w500,
-    height: 0.05,
   );
   static const TextStyle inputeLabel = TextStyle(
     color: Color(0xFF24786D),
@@ -68,5 +67,11 @@ class AppStyle {
     fontFamily: 'Caros',
     fontWeight: FontWeight.w600,
     height: 0.06,
+  );
+  static const TextStyle meduim12 = TextStyle(
+    color: Color(0xFF797C7A),
+    fontSize: 12,
+    fontFamily: 'Circular Std',
+    fontWeight: FontWeight.w400,
   );
 }

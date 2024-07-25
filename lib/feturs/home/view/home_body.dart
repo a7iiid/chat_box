@@ -1,7 +1,10 @@
 import 'package:chat_app/core/assets.dart';
 import 'package:chat_app/core/utils/app_style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
+import '../widget/ListMassege.dart';
 import '../widget/hedar_home.dart';
 import '../widget/status.dart';
 
@@ -26,25 +29,15 @@ class HomeBody extends StatelessWidget {
         Positioned(
           width: MediaQuery.of(context).size.width,
           top: 130,
-          bottom: 0,
+          bottom: MediaQuery.of(context).size.height * 0.7,
           child: const Status(),
         ),
         Positioned(
-            top: MediaQuery.of(context).size.height * .3,
-            width: MediaQuery.of(context).size.width,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              decoration: ShapeDecoration(
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40),
-                    topRight: Radius.circular(40),
-                  ),
-                ),
-              ),
-            ))
+          top: MediaQuery.of(context).size.height * 0.3,
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height * 0.7, // Constrain height
+          child: const LastMessages(),
+        ),
       ],
     );
   }

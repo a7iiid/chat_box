@@ -17,8 +17,16 @@ class Assets {
   /// assets/image/logo.svg
   static const String imageLogo = "assets/image/logo.svg";
 
+  /// Assets for imageNotification
+  /// assets/image/notification.svg
+  static const String imageNotification = "assets/image/notification.svg";
+
   /// Assets for imageSearch
   /// assets/image/Search.svg
   static const String imageSearch = "assets/image/Search.svg";
+
+  /// Assets for imageTrash
+  /// assets/image/trash.svg
+  static const String imageTrash = "assets/image/trash.svg";
 }
 
