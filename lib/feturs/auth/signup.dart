@@ -1,5 +1,6 @@
 import 'package:chat_app/core/assets.dart';
 import 'package:chat_app/core/utils/app_style.dart';
+import 'package:chat_app/feturs/auth/widget/form_log_up.dart';
 import 'package:chat_app/feturs/auth/widget/form_login.dart';
 import 'package:chat_app/feturs/auth/widget/social_list.dart';
 import 'package:flutter/material.dart';
@@ -13,47 +14,47 @@ class SignUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 41.0),
+          padding: const EdgeInsets.symmetric(horizontal: 41.0),
           child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 110,
                     ),
-                    Text(
+                    const Text(
                       'Log in to Chatbox',
                       style: AppStyle.bold18,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
-                    Text(
+                    const Text(
                       '''Welcome back! Sign in using your social account or email to continue us''',
                       style: AppStyle.scondaryText,
                       textAlign: TextAlign.center, // Ensure text is centered
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 38,
                     ),
                     InkWell(
                       child: SocialList(),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 36,
                     ),
-                    Deviders(),
-                    SizedBox(
+                    const Deviders(),
+                    const SizedBox(
                       height: 36,
                     ),
                   ],
                 ),
               ),
-              FormLogin()
+              const FormLogup()
             ],
           )),
     );

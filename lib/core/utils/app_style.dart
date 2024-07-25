@@ -74,4 +74,10 @@ class AppStyle {
     fontFamily: 'Circular Std',
     fontWeight: FontWeight.w400,
   );
+  static const TextStyle meduim68 = TextStyle(
+    color: Colors.white,
+    fontSize: 68,
+    fontFamily: 'Caros',
+    fontWeight: FontWeight.w400,
+  );
 }
