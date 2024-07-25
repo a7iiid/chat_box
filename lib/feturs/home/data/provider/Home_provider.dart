@@ -1,16 +1,14 @@
 import 'package:chat_app/core/assets.dart';
-import 'package:chat_app/feturs/home/view/messages_page.dart';
+import 'package:chat_app/feturs/call/call.dart';
+import 'package:chat_app/feturs/contacts/contacts.dart';
+import 'package:chat_app/feturs/home/view/recent_message.dart';
+import 'package:chat_app/feturs/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class HomeProvider with ChangeNotifier {
   int selectedPage = 0;
-  List<Widget> pages = [
-    MessagesPage(),
-    MessagesPage(),
-    MessagesPage(),
-    MessagesPage()
-  ];
+  List<Widget> pages = [RecantMessages(), Call(), Contacts(), Settings()];
   List<BottomNavigationBarItem> bottomItems = [
     BottomNavigationBarItem(
         icon: SvgPicture.asset(

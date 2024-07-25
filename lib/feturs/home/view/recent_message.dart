@@ -3,8 +3,8 @@ import '../widget/ListMassege.dart';
 import '../widget/hedar_home.dart';
 import '../widget/status.dart';
 
-class MessagesPage extends StatelessWidget {
-  const MessagesPage({super.key});
+class RecantMessages extends StatelessWidget {
+  const RecantMessages({super.key});
 
   @override
   Widget build(BuildContext context) {

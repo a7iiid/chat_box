@@ -61,7 +61,7 @@ class _SplashBodyState extends State<SplashBody> with TickerProviderStateMixin {
 void navPage(BuildContext context) {
   Future.delayed(const Duration(seconds: 3), () {
     if (FirebaseAuth.instance.currentUser == null) {
-      GoRouter.of(context).pushReplacement(Routes.kLoginScreen);
+      GoRouter.of(context).pushReplacement(Routes.kAuthpage);
     } else {
       GoRouter.of(context).pushReplacement(Routes.kHomePage);
     }

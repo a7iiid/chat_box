@@ -2,7 +2,7 @@ import 'package:chat_app/feturs/home/data/provider/Home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'view/messages_page.dart';
+import 'view/recent_message.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -17,6 +17,7 @@ class Home extends StatelessWidget {
             body: Provider.of<HomeProvider>(context)
                 .pages[Provider.of<HomeProvider>(context).selectedPage],
             bottomNavigationBar: BottomNavigationBar(
+              elevation: 0,
               backgroundColor: Colors.white,
               items: Provider.of<HomeProvider>(context).bottomItems,
               currentIndex: Provider.of<HomeProvider>(context).selectedPage,

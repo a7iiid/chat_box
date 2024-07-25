@@ -19,7 +19,15 @@ class _LastMessagesState extends State<LastMessages> {
     "John Doe: Let's catch up tomorrow.",
     "Jane Smith: See you at the meeting.",
     "Emily Johnson: Happy birthday!",
-    "Michael Brown: Great job on the project!"
+    "Michael Brown: Great job on the project!",
+    "Michael Brown: Great job on the project!",
+    "Michael Brown: Great job on the project!",
+    "Michael Brown: Great job on the project!",
+    "Michael Brown: Great job on the project!",
+    "Michael Brown: Great job on the project!",
+    "Michael Brown: Great job on the project!",
+    "Michael Brown: Great job on the project!",
+    "Michael Brown: Great job on the project!",
   ];
 
   void _removeItem(int index) {
