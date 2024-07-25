@@ -1,15 +1,10 @@
-import 'package:chat_app/core/assets.dart';
-import 'package:chat_app/core/utils/app_style.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
 import '../widget/ListMassege.dart';
 import '../widget/hedar_home.dart';
 import '../widget/status.dart';
 
-class HomeBody extends StatelessWidget {
-  const HomeBody({super.key});
+class MessagesPage extends StatelessWidget {
+  const MessagesPage({super.key});
 
   @override
   Widget build(BuildContext context) {

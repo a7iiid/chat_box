@@ -106,18 +106,26 @@ class _LastMessagesState extends State<LastMessages> {
                 // All actions are defined in the children parameter.
                 children: [
                   Spacer(),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: CircleAvatar(
-                      backgroundColor: Colors.black,
-                      child: SvgPicture.asset(Assets.imageNotification),
+                  InkWell(
+                    onTap: () {},
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.black,
+                        child: SvgPicture.asset(Assets.imageNotification),
+                      ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CircleAvatar(
-                      backgroundColor: Colors.red,
-                      child: SvgPicture.asset(Assets.imageTrash),
+                  InkWell(
+                    onTap: () {
+                      _removeItem(index);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.red,
+                        child: SvgPicture.asset(Assets.imageTrash),
+                      ),
                     ),
                   )
                 ],
