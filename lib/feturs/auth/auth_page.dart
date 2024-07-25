@@ -1,4 +1,7 @@
+import 'package:chat_app/core/assets.dart';
+import 'package:chat_app/core/utils/app_style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
@@ -37,6 +40,35 @@ class AuthPage extends StatelessWidget {
                 ),
               ),
             ),
+            Positioned(
+                top: 30,
+                left: 0,
+                right: 0,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          Assets.imageLogo,
+                          color: Colors.white,
+                          height: 20,
+                        ),
+                        const SizedBox(
+                          width: 3,
+                        ),
+                        const Text(
+                          "ChatBox",
+                          style: AppStyle.regular14,
+                        )
+                      ],
+                    )
+                  ],
+                ))
           ],
         ),
       ),
