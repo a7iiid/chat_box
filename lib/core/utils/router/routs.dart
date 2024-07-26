@@ -36,7 +36,7 @@ abstract class Routes {
     GoRoute(
       path: kSignUpScreen,
       builder: (context, state) {
-        return const SignUp();
+        return SignUp();
       },
     ),
     GoRoute(
