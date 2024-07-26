@@ -1,5 +1,5 @@
 import 'package:chat_app/core/utils/router/routs.dart';
-import 'package:chat_app/feturs/auth/data/auth_user.dart';
+import 'package:chat_app/servise/auth_user.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

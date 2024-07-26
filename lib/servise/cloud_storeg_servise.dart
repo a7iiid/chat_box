@@ -11,14 +11,13 @@ class CloudStorageServise {
     _storage = FirebaseStorage.instance;
     _reference = _storage.ref();
   }
-  Future<TaskSnapshot?> uploadUserImage(String _uid, File _image) async {
+  Future<String> uploadUserImage(String _uid, File _image) async {
     try {
-      return await _reference
-          .child('Profile_Image')
-          .child(_uid)
-          .putFile(_image);
+      var uplod =
+          await _reference.child('Profile_Image').child(_uid).putFile(_image);
+      return uplod.ref.getDownloadURL();
     } on Exception catch (e) {
-      return null;
+      return "https://cdn0.iconfinder.com/data/icons/occupation-002/64/programmer-programming-occupation-avatar-512.png";
     }
   }
 }

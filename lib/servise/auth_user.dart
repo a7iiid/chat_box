@@ -1,5 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'cloud_storeg_servise.dart';
+import 'db_servise.dart';
+import 'media_servise.dart';
 
 class AuthUser {
   static Future<String> logIn(String email, String password) async {
@@ -8,12 +13,12 @@ class AuthUser {
           .signInWithEmailAndPassword(email: email, password: password);
       return "success";
     } catch (e) {
-      return "Filde";
+      return "Failed";
     }
   }
 
-  static Future<String> SignUp(
-      String email, String password, String name) async {
+  static Future<String> signUp(
+      BuildContext context, String email, String password, String name) async {
     try {
       UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -21,18 +26,16 @@ class AuthUser {
         password: password,
       );
       User? user = userCredential.user;
+      MediaService mediaService =
+          Provider.of<MediaService>(context, listen: false);
+      if (mediaService.image != null) {
+        var image = await CloudStorageServise.instance
+            .uploadUserImage(user!.uid, mediaService.image!);
+        await DbService.instance.creatUserDb(name, email, user.uid, image);
+      }
 
-      // if (pickImageServes.file != null) {
-      //   await pickImageServes.uplode();
-
-      //   await user?.updatePhotoURL(pickImageServes.url);
-      // }
-      await user?.updateDisplayName(name);
-      await FirebaseFirestore.instance.collection("users").add({
-        "name": name,
-        "email": email,
-      });
-      return "creat user";
+      await user!.updateDisplayName(name);
+      return "create user";
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         return 'The password provided is too weak.';
