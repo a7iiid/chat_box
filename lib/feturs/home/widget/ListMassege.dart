@@ -1,9 +1,13 @@
+import 'package:chat_app/feturs/home/data/model/conversation.dart';
+import 'package:chat_app/feturs/home/data/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/assets.dart';
 import '../../../core/utils/app_style.dart';
+import '../../../provider/user_provider.dart';
 
 class LastMessages extends StatefulWidget {
   const LastMessages({super.key});
@@ -14,24 +18,23 @@ class LastMessages extends StatefulWidget {
 
 class _LastMessagesState extends State<LastMessages> {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
-  final List<String> _messages = [
-    "Alex Linderson: How are you today?",
-    "John Doe: Let's catch up tomorrow.",
-    "Jane Smith: See you at the meeting.",
-    "Emily Johnson: Happy birthday!",
-    "Michael Brown: Great job on the project!",
-    "Michael Brown: Great job on the project!",
-    "Michael Brown: Great job on the project!",
-    "Michael Brown: Great job on the project!",
-    "Michael Brown: Great job on the project!",
-    "Michael Brown: Great job on the project!",
-    "Michael Brown: Great job on the project!",
-    "Michael Brown: Great job on the project!",
-    "Michael Brown: Great job on the project!",
-  ];
+  List<Conversation>? conversation;
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    conversation = UserProvider.get(context).user?.conversation;
+
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    // Use the userProvider instance here
+  }
 
   void _removeItem(int index) {
-    String removedMessage = _messages.removeAt(index);
+    Conversation removedMessage = conversation!.removeAt(index);
     _listKey.currentState?.removeItem(
       index,
       (context, animation) => SizeTransition(
@@ -42,15 +45,16 @@ class _LastMessagesState extends State<LastMessages> {
     );
   }
 
-  Widget _buildItem(String message, Animation<double> animation) {
+  Widget _buildItem(Conversation conversation, Animation<double> animation) {
     return SizeTransition(
       sizeFactor: animation,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0), // Add padding
         child: Row(
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               radius: 26,
+              backgroundImage: NetworkImage(conversation.image!),
             ),
             const SizedBox(
               width: 12,
@@ -60,18 +64,18 @@ class _LastMessagesState extends State<LastMessages> {
                   CrossAxisAlignment.start, // Align text to the start
               children: [
                 Text(
-                  message.split(": ")[0],
+                  conversation.name!,
                   style: AppStyle.medium20,
                 ),
                 Text(
-                  message.split(": ")[1],
+                  conversation.lastMessage!,
                   style: AppStyle.meduim12,
                 ),
               ],
             ),
             const Spacer(),
             Text(
-              "2 min ago",
+              conversation.timestamp!.toDate().toString(),
               style: AppStyle.meduim12,
             )
           ],
@@ -96,52 +100,54 @@ class _LastMessagesState extends State<LastMessages> {
       ),
       child: Padding(
         padding: const EdgeInsets.all(16.0), // Add padding
-        child: AnimatedList(
-          key: _listKey,
-          initialItemCount: _messages.length,
-          itemBuilder: (context, index, animation) {
-            return Slidable(
-              key: ValueKey(_messages[index]),
-              direction: Axis.horizontal,
-              endActionPane: ActionPane(
-                // A motion is a widget used to control how the pane animates.
-                motion: const ScrollMotion(),
-                dragDismissible: true,
+        child: Builder(builder: (context) {
+          return AnimatedList(
+            key: _listKey,
+            initialItemCount: conversation!.length,
+            itemBuilder: (context, index, animation) {
+              return Slidable(
+                key: ValueKey(conversation?[index]),
+                direction: Axis.horizontal,
+                endActionPane: ActionPane(
+                  // A motion is a widget used to control how the pane animates.
+                  motion: const ScrollMotion(),
+                  dragDismissible: true,
 
-                // A pane can dismiss the Slidable.
-                dismissible: DismissiblePane(onDismissed: () {}),
+                  // A pane can dismiss the Slidable.
+                  dismissible: DismissiblePane(onDismissed: () {}),
 
-                // All actions are defined in the children parameter.
-                children: [
-                  Spacer(),
-                  InkWell(
-                    onTap: () {},
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: CircleAvatar(
-                        backgroundColor: Colors.black,
-                        child: SvgPicture.asset(Assets.imageNotification),
+                  // All actions are defined in the children parameter.
+                  children: [
+                    Spacer(),
+                    InkWell(
+                      onTap: () {},
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.black,
+                          child: SvgPicture.asset(Assets.imageNotification),
+                        ),
                       ),
                     ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      _removeItem(index);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CircleAvatar(
-                        backgroundColor: Colors.red,
-                        child: SvgPicture.asset(Assets.imageTrash),
+                    InkWell(
+                      onTap: () {
+                        _removeItem(index);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.red,
+                          child: SvgPicture.asset(Assets.imageTrash),
+                        ),
                       ),
-                    ),
-                  )
-                ],
-              ),
-              child: _buildItem(_messages[index], animation),
-            );
-          },
-        ),
+                    )
+                  ],
+                ),
+                child: _buildItem(conversation![index], animation),
+              );
+            },
+          );
+        }),
       ),
     );
   }

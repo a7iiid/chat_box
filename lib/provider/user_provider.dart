@@ -31,4 +31,16 @@ class UserProvider with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<void> loadConversation() async {
+    userStat = UserStat.loadingUser;
+    notifyListeners();
+    try {
+      user = await DbService.instance.loadUserData();
+      userStat = UserStat.userLoaded;
+    } on Exception catch (_) {
+      userStat = UserStat.userError;
+    }
+    notifyListeners();
+  }
 }

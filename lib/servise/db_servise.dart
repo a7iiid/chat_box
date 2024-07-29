@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:chat_app/feturs/home/data/model/conversation.dart';
 import 'package:chat_app/feturs/home/data/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,7 +12,8 @@ class DbService {
   FirebaseFirestore _db;
   FirebaseStorage _storage;
   FirebaseAuth _authUser;
-  String _collectionName = 'users';
+  String _userCollection = 'users';
+  String _conversationCollection = 'conversation';
 
   DbService()
       : _db = FirebaseFirestore.instance,
@@ -26,11 +30,32 @@ class DbService {
   }
 
   Future<UserModel> loadUserData() async {
-    var user = await FirebaseFirestore.instance
-        .collection(_collectionName)
+    var userDoc = await FirebaseFirestore.instance
+        .collection(_userCollection)
         .doc(_authUser.currentUser!.uid)
         .get();
+    log(userDoc.data().toString());
 
-    return UserModel.fromJson(user.data() as Map<String, dynamic>);
+    var conversationDocs = await FirebaseFirestore.instance
+        .collection(_userCollection)
+        .doc(_authUser.currentUser!.uid)
+        .collection('conversation')
+        .get();
+    log(conversationDocs.docs.toString());
+
+    List<Conversation> conversations = conversationDocs.docs
+        .map((doc) => Conversation.fromJson(doc.data()))
+        .toList();
+
+    return UserModel.fromJson(
+        userDoc.data() as Map<String, dynamic>, conversations);
   }
+  //   Future<List<Conversation>> loadConversation(List<String> conversation) async {
+  //   var user = await FirebaseFirestore.instance
+  //       .collection(_conversationCollection)
+
+  //       .get();
+
+  //   return Conversation.fromJson(user.data() as Map<String, dynamic>);
+  // }
 }
