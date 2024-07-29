@@ -1,16 +1,23 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../core/utils/router/routs.dart';
+import '../provider/user_provider.dart';
 import 'cloud_storeg_servise.dart';
 import 'db_servise.dart';
 import 'media_servise.dart';
 
 class AuthUser {
-  static Future<String> logIn(String email, String password) async {
+  static Future<String> logIn(
+      String email, String password, BuildContext context) async {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
+      await Provider.of<UserProvider>(context, listen: false).loadUserData();
+      GoRouter.of(context).pushReplacement(Routes.kHomePage);
+
       return "success";
     } catch (e) {
       return "Failed";

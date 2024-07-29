@@ -53,17 +53,13 @@ class _FormLoginState extends State<FormLogin> {
               const Expanded(child: SizedBox()),
               CustomBottom(
                 func: () async {
-                  String respons =
-                      await AuthUser.logIn(email.text, passowrd.text);
-
                   if (_formKey.currentState!.validate()) {
-                    await UserProvider.get(context).loadUserData();
-
-                    GoRouter.of(context).pushReplacement(Routes.kHomePage);
+                    String respons = await AuthUser.logIn(
+                        email.text, passowrd.text, context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(respons)),
+                    );
                   }
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(respons)),
-                  );
                 },
                 text: "Log In",
               ),
