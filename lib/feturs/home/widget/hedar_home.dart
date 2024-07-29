@@ -41,6 +41,7 @@ class HedarHome extends StatelessWidget {
           },
           child: CircleAvatar(
             radius: 22,
+            // child: NetworkImage(),
           ),
         )
       ],

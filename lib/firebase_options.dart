@@ -64,6 +64,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '606922092381',
     projectId: 'chat-box-9a9d1',
     storageBucket: 'chat-box-9a9d1.appspot.com',
+    iosClientId: '606922092381-npkldiaddpirmu7mengp7d1hsf4344ev.apps.googleusercontent.com',
     iosBundleId: 'com.example.chatApp',
   );
 
@@ -73,6 +74,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '606922092381',
     projectId: 'chat-box-9a9d1',
     storageBucket: 'chat-box-9a9d1.appspot.com',
+    iosClientId: '606922092381-npkldiaddpirmu7mengp7d1hsf4344ev.apps.googleusercontent.com',
     iosBundleId: 'com.example.chatApp',
   );
 
@@ -85,4 +87,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'chat-box-9a9d1.appspot.com',
     measurementId: 'G-68S20P2P4W',
   );
+
 }
