@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:chat_app/core/assets.dart';
 import 'package:chat_app/core/utils/app_style.dart';
 import 'package:chat_app/core/utils/router/routs.dart';
+import 'package:chat_app/provider/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class SplashBody extends StatefulWidget {
   const SplashBody({super.key});
@@ -59,10 +63,11 @@ class _SplashBodyState extends State<SplashBody> with TickerProviderStateMixin {
 }
 
 void navPage(BuildContext context) {
-  Future.delayed(const Duration(seconds: 3), () {
+  Future.delayed(const Duration(seconds: 3), () async {
     if (FirebaseAuth.instance.currentUser == null) {
       GoRouter.of(context).pushReplacement(Routes.kAuthpage);
     } else {
+      await UserProvider.get(context).loadUserData();
       GoRouter.of(context).pushReplacement(Routes.kHomePage);
     }
   });

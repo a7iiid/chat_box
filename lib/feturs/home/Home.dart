@@ -1,4 +1,4 @@
-import 'package:chat_app/feturs/home/data/provider/Home_provider.dart';
+import 'package:chat_app/provider/Home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

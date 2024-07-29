@@ -1,6 +1,8 @@
 import 'package:chat_app/firebase_options.dart';
+import 'package:chat_app/provider/user_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'core/utils/router/routs.dart';
 
@@ -15,11 +17,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      theme: ThemeData(scaffoldBackgroundColor: Colors.white),
-      debugShowCheckedModeBanner: false,
-      routerConfig: Routes.router,
-      title: "ChatBox",
+    return MultiProvider(
+      providers: [Provider(create: (context) => UserProvider())],
+      child: MaterialApp.router(
+        theme: ThemeData(scaffoldBackgroundColor: Colors.white),
+        debugShowCheckedModeBanner: false,
+        routerConfig: Routes.router,
+        title: "ChatBox",
+      ),
     );
   }
 }

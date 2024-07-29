@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserModel {
   String name;
   String image;
@@ -11,7 +13,8 @@ class UserModel {
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       image: json['image'],
-      lastSeen: json['lastSeen'],
+      lastSeen: (json['lastSeen'] as Timestamp)
+          .toDate(), // Convert Timestamp to DateTime
       name: json['name'],
       conversation: json['conversation'],
     );
