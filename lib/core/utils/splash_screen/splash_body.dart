@@ -27,6 +27,9 @@ class _SplashBodyState extends State<SplashBody> with TickerProviderStateMixin {
   );
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Provider.of<UserProvider>(context, listen: false).loadUserData();
+    });
     navPage(context);
     super.initState();
   }
@@ -67,7 +70,6 @@ void navPage(BuildContext context) {
     if (FirebaseAuth.instance.currentUser == null) {
       GoRouter.of(context).pushReplacement(Routes.kAuthpage);
     } else {
-      await UserProvider.get(context).loadUserData();
       GoRouter.of(context).pushReplacement(Routes.kHomePage);
     }
   });

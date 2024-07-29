@@ -9,7 +9,10 @@ import 'core/utils/router/routs.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [ChangeNotifierProvider(create: (context) => UserProvider())],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -17,14 +20,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [Provider(create: (context) => UserProvider())],
-      child: MaterialApp.router(
-        theme: ThemeData(scaffoldBackgroundColor: Colors.white),
-        debugShowCheckedModeBanner: false,
-        routerConfig: Routes.router,
-        title: "ChatBox",
-      ),
+    return MaterialApp.router(
+      theme: ThemeData(scaffoldBackgroundColor: Colors.white),
+      debugShowCheckedModeBanner: false,
+      routerConfig: Routes.router,
+      title: "ChatBox",
     );
   }
 }

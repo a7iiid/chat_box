@@ -3,6 +3,7 @@ import 'package:chat_app/servise/auth_user.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../provider/user_provider.dart';
 import 'coustom_text_form_filde.dart';
 import 'custom_bottom.dart';
 
@@ -56,6 +57,8 @@ class _FormLoginState extends State<FormLogin> {
                       await AuthUser.logIn(email.text, passowrd.text);
 
                   if (_formKey.currentState!.validate()) {
+                    await UserProvider.get(context).loadUserData();
+
                     GoRouter.of(context).pushReplacement(Routes.kHomePage);
                   }
                   ScaffoldMessenger.of(context).showSnackBar(
