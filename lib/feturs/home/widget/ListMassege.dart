@@ -1,5 +1,5 @@
-import 'package:chat_app/feturs/home/data/model/conversation.dart';
-import 'package:chat_app/feturs/home/data/model/user.dart';
+import 'package:chat_app/model/conversation.dart';
+import 'package:chat_app/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';

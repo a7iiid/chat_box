@@ -1,4 +1,4 @@
-import 'package:chat_app/feturs/home/data/model/conversation.dart';
+import 'package:chat_app/model/conversation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
