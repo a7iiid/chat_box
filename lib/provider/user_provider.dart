@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chat_app/model/user.dart';
 import 'package:chat_app/servise/db_servise.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -35,6 +37,7 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
     try {
       user = await DbService.instance.loadUserData();
+      log(user.toString());
       userStat = UserStat.userLoaded;
     } on Exception catch (_) {
       userStat = UserStat.userError;

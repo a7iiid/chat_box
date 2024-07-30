@@ -6,6 +6,11 @@ class Chat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('Raed'),
+      ),
+    );
   }
 }

@@ -41,6 +41,8 @@ class DbService {
         .doc(_authUser.currentUser!.uid)
         .collection(_chatCollection)
         .get();
+    log(conversationDocs.toString());
+    log(userDoc.toString());
 
     List<Conversation> conversations = conversationDocs.docs
         .map((doc) => Conversation.fromJson(doc.data()))

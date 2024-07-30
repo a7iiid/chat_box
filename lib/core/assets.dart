@@ -9,6 +9,10 @@ class Assets {
   /// assets/image/Call.svg
   static const String imageCall = "assets/image/Call.svg";
 
+  /// Assets for imageEllipse
+  /// assets/image/Ellipse.svg
+  static const String imageEllipse = "assets/image/Ellipse.svg";
+
   /// Assets for imageFacebook
   /// assets/image/Facebook.svg
   static const String imageFacebook = "assets/image/Facebook.svg";

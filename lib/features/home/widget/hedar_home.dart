@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chat_app/core/assets.dart';
 import 'package:chat_app/core/utils/app_style.dart';
 import 'package:chat_app/provider/user_provider.dart';
@@ -41,14 +43,21 @@ class HedarHome extends StatelessWidget {
             await FirebaseAuth.instance.signOut();
             GoRouter.of(context).pushReplacement(Routes.kAuthpage);
           },
-          child: Builder(builder: (context) {
-            final user = UserProvider.get(context).user;
-            return CircleAvatar(
-              radius: 22,
-              backgroundImage:
-                  NetworkImage(user!.image), // Pass the user's image URL here
-            );
-          }),
+          child: Consumer<UserProvider>(
+            builder: (context, user, child) {
+              log(user.userStat.toString());
+              if (user.user != null) {
+                log(user.user!.image.toString());
+              }
+              return user.userStat != UserStat.loadingUser
+                  ? CircleAvatar(
+                      radius: 22,
+                      backgroundImage: NetworkImage(user.user!.image))
+                  : CircleAvatar(
+                      radius: 22,
+                    );
+            },
+          ),
         )
       ],
     );

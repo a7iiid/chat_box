@@ -1,8 +1,8 @@
 import 'package:chat_app/core/assets.dart';
-import 'package:chat_app/feturs/call/call.dart';
-import 'package:chat_app/feturs/contacts/contacts.dart';
-import 'package:chat_app/feturs/home/view/recent_message.dart';
-import 'package:chat_app/feturs/settings/settings.dart';
+import 'package:chat_app/features/call/call.dart';
+import 'package:chat_app/features/contacts/contacts.dart';
+import 'package:chat_app/features/home/view/recent_message.dart';
+import 'package:chat_app/features/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 

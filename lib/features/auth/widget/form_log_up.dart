@@ -1,5 +1,5 @@
-import 'package:chat_app/feturs/auth/widget/coustom_text_form_filde.dart';
-import 'package:chat_app/feturs/auth/widget/custom_bottom.dart';
+import 'package:chat_app/features/auth/widget/coustom_text_form_filde.dart';
+import 'package:chat_app/features/auth/widget/custom_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';

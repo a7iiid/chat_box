@@ -1,5 +1,5 @@
 import 'package:chat_app/core/assets.dart';
-import 'package:chat_app/feturs/auth/widget/social_login.dart';
+import 'package:chat_app/features/auth/widget/social_login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

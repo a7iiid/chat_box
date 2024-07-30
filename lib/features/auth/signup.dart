@@ -1,7 +1,7 @@
 import 'package:chat_app/core/assets.dart';
 import 'package:chat_app/core/utils/app_style.dart';
-import 'package:chat_app/feturs/auth/widget/form_log_up.dart';
-import 'package:chat_app/feturs/auth/widget/social_list.dart';
+import 'package:chat_app/features/auth/widget/form_log_up.dart';
+import 'package:chat_app/features/auth/widget/social_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

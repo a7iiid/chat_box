@@ -1,8 +1,9 @@
 import 'package:chat_app/core/utils/splash_screen/splash.dart';
-import 'package:chat_app/feturs/auth/auth_page.dart';
-import 'package:chat_app/feturs/auth/login.dart';
-import 'package:chat_app/feturs/auth/signup.dart';
-import 'package:chat_app/feturs/home/Home.dart';
+import 'package:chat_app/features/auth/auth_page.dart';
+import 'package:chat_app/features/auth/login.dart';
+import 'package:chat_app/features/auth/signup.dart';
+import 'package:chat_app/features/chat/chat.dart';
+import 'package:chat_app/features/home/Home.dart';
 import 'package:go_router/go_router.dart';
 
 abstract class Routes {
@@ -12,7 +13,7 @@ abstract class Routes {
   static const kAuthpage = '/authpage';
   static const kSettings = '/settings';
   static const kEditProfilePage = '/editProfile';
-  static const kMapRouteBus = '/maproutebus';
+  static const kChat = '/chat';
 
   static final router = GoRouter(routes: [
     GoRoute(
@@ -43,6 +44,12 @@ abstract class Routes {
       path: kAuthpage,
       builder: (context, state) {
         return const AuthPage();
+      },
+    ),
+    GoRoute(
+      path: kChat,
+      builder: (context, state) {
+        return const Chat();
       },
     ),
   ]);
