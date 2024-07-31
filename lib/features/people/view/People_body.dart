@@ -1,8 +1,11 @@
 import 'package:chat_app/features/home/widget/main_shap.dart';
+import 'package:chat_app/provider/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../home/widget/LastMessages.dart';
 import '../../home/widget/hedar_home.dart';
+import '../widget/people_card.dart';
 
 class PeopleBody extends StatelessWidget {
   const PeopleBody({super.key});
@@ -25,56 +28,27 @@ class PeopleBody extends StatelessWidget {
         ),
         Positioned(
           top: MediaQuery.of(context).size.height * 0.2,
-          child: MainShap(height: height, child: PeopleCard()),
+          child: MainShap(
+              height: height,
+              child: Consumer<UserProvider>(
+                builder: (context, provider, child) {
+                  return GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                    ),
+                    itemCount: provider.users!.length,
+                    itemBuilder: (context, index) {
+                      return PeopleCard(
+                        user: provider.users![index],
+                      );
+                    },
+                  );
+                },
+              )),
         ),
       ],
     );
     ;
-  }
-}
-
-class PeopleCard extends StatelessWidget {
-  const PeopleCard({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 5,
-              offset: Offset(0, 3), // changes position of shadow
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage('https://via.placeholder.com/150'),
-              radius: 60,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              'Hello',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }

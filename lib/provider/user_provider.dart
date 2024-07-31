@@ -19,7 +19,7 @@ class UserProvider with ChangeNotifier {
   static UserProvider get(context) => Provider.of<UserProvider>(context);
   UserModel? user;
   UserStat userStat = UserStat.initUser;
-  List<UserModel>? listUsers;
+  List<UserModel>? users;
   Conversation? _selectConversation;
 
   Conversation? get selectConversation => _selectConversation;
@@ -36,6 +36,19 @@ class UserProvider with ChangeNotifier {
     try {
       user = await DbService.instance.loadUserData();
       log(user.toString());
+      userStat = UserStat.userLoaded;
+    } on Exception catch (_) {
+      userStat = UserStat.userError;
+    }
+    notifyListeners();
+  }
+
+  Future<void> loadAllUserData() async {
+    userStat = UserStat.loadingUser;
+    notifyListeners();
+    try {
+      users = await DbService.instance.loadAllUsersData();
+      log(users.toString());
       userStat = UserStat.userLoaded;
     } on Exception catch (_) {
       userStat = UserStat.userError;

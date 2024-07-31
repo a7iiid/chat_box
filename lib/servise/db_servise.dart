@@ -52,6 +52,28 @@ class DbService {
         userDoc.data() as Map<String, dynamic>, conversations);
   }
 
+  Future<List<UserModel>> loadAllUsersData() async {
+    var userDocs = await _db.collection(_userCollection).get();
+    List<UserModel> users = [];
+
+    for (var userDoc in userDocs.docs) {
+      var conversationDocs = await _db
+          .collection(_userCollection)
+          .doc(userDoc.id)
+          .collection(_chatCollection)
+          .get();
+
+      List<Conversation> conversations = conversationDocs.docs
+          .map((doc) => Conversation.fromJson(doc.data(), doc.id))
+          .toList();
+
+      users.add(UserModel.fromJson(
+          userDoc.data() as Map<String, dynamic>, conversations));
+    }
+
+    return users;
+  }
+
   Stream<Chat?> streamChat(String chatId) {
     return _db.collection(_chatCollection).doc(chatId).snapshots().map(
         (querySnapshot) =>

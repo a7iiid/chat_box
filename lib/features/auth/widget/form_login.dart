@@ -1,9 +1,6 @@
-import 'package:chat_app/core/utils/router/routs.dart';
 import 'package:chat_app/servise/auth_user.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
-import '../../../provider/user_provider.dart';
 import 'coustom_text_form_filde.dart';
 import 'custom_bottom.dart';
 
