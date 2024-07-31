@@ -38,7 +38,7 @@ class AuthUser {
       if (mediaService.image != null) {
         var image = await CloudStorageServise.instance
             .uploadUserImage(user!.uid, mediaService.image!);
-        await DbService.instance.creatUserDb(name, email, user.uid, image);
+        await DbService.instance.createUserDb(name, email, user.uid, image);
       }
 
       await user!.updateDisplayName(name);

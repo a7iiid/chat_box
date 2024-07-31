@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:chat_app/model/conversation.dart';
 import 'package:chat_app/model/user.dart';
 import 'package:chat_app/servise/db_servise.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -23,6 +24,7 @@ class UserProvider with ChangeNotifier {
   UserModel? user;
   UserStat userStat = UserStat.initUser;
   List<UserModel>? listUsers;
+  late Conversation selectConversation;
 
   Future<void> loadUserData() async {
     userStat = UserStat.loadingUser;
@@ -35,5 +37,9 @@ class UserProvider with ChangeNotifier {
       userStat = UserStat.userError;
     }
     notifyListeners();
+  }
+
+  void setConversation(Conversation conversation) {
+    selectConversation = conversation;
   }
 }

@@ -1,6 +1,7 @@
 import 'package:chat_app/core/utils/router/routs.dart';
 import 'package:chat_app/model/conversation.dart';
 import 'package:chat_app/model/user.dart';
+import 'package:chat_app/provider/chat_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
@@ -107,11 +108,14 @@ class _LastMessagesState extends State<LastMessages> {
         child: Builder(builder: (context) {
           return AnimatedList(
             key: _listKey,
-            initialItemCount: conversation?.length ?? 0,
+            initialItemCount: conversation!.length,
             itemBuilder: (context, index, animation) {
               if (userProvider.userStat != UserStat.loadingUser) {
                 return InkWell(
                   onTap: () {
+                    userProvider.setConversation(conversation![index]);
+                    Provider.of<ChatProvider>(context, listen: false)
+                        .loadChatUser(conversation![index].chatId!);
                     GoRouter.of(context).push(Routes.kChat);
                   },
                   child: Slidable(
@@ -156,7 +160,7 @@ class _LastMessagesState extends State<LastMessages> {
                   ),
                 );
               }
-              return SizedBox();
+              return const SizedBox();
             },
           );
         }),
