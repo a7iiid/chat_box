@@ -1,6 +1,6 @@
 import 'package:chat_app/core/assets.dart';
 import 'package:chat_app/features/call/call.dart';
-import 'package:chat_app/features/contacts/contacts.dart';
+import 'package:chat_app/features/people/people.dart';
 import 'package:chat_app/features/home/view/recent_message.dart';
 import 'package:chat_app/features/settings/settings.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class HomeProvider with ChangeNotifier {
   int selectedPage = 0;
-  List<Widget> pages = [RecantMessages(), Call(), Contacts(), Settings()];
+  List<Widget> pages = [RecantMessages(), Call(), People(), Settings()];
   List<BottomNavigationBarItem> bottomItems = [
     BottomNavigationBarItem(
         icon: SvgPicture.asset(
@@ -27,7 +27,7 @@ class HomeProvider with ChangeNotifier {
           Assets.imageUser,
           color: Color(0xFF797C7B),
         ),
-        label: 'Contacts'),
+        label: 'People'),
     BottomNavigationBarItem(
         icon: SvgPicture.asset(
           Assets.imageSettings,
@@ -55,7 +55,7 @@ class HomeProvider with ChangeNotifier {
             Assets.imageUser,
             color: selectedPage == 2 ? Color(0xFF24786D) : Color(0xFF797C7B),
           ),
-          label: 'Contacts'),
+          label: 'People'),
       BottomNavigationBarItem(
         icon: SvgPicture.asset(
           Assets.imageSettings,

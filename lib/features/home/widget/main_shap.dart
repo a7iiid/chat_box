@@ -1,14 +1,16 @@
+import 'package:chat_app/features/home/widget/custom_container.dart';
 import 'package:flutter/material.dart';
 
 class MainShap extends StatelessWidget {
-  MainShap({super.key, required this.child});
+  MainShap({super.key, required this.child, this.height});
   Widget child;
+  double? height;
 
   @override
   Widget build(BuildContext context) {
     return Container(
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.7,
+        height: height ?? MediaQuery.of(context).size.height * 0.7,
         decoration: const ShapeDecoration(
           color: Colors.white,
           shape: RoundedRectangleBorder(
@@ -18,6 +20,12 @@ class MainShap extends StatelessWidget {
             ),
           ),
         ),
-        child: child);
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CustomContainer(),
+            Expanded(child: child),
+          ],
+        ));
   }
 }
