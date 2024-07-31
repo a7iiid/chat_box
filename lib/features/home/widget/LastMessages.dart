@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../../../core/assets.dart';
 import '../../../core/utils/app_style.dart';
 import '../../../provider/user_provider.dart';
+import 'main_shap.dart';
 
 class LastMessages extends StatefulWidget {
   const LastMessages({super.key});
@@ -87,18 +88,7 @@ class _LastMessagesState extends State<LastMessages> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.7,
-      decoration: const ShapeDecoration(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(40),
-            topRight: Radius.circular(40),
-          ),
-        ),
-      ),
+    return MainShap(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Builder(builder: (context) {

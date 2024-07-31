@@ -54,6 +54,9 @@ class _ChatBodyState extends State<ChatBody> {
       children: [
         Column(
           children: [
+            const SizedBox(
+              height: 20,
+            ),
             Expanded(
               child: Consumer<ChatProvider>(builder: (context, chat, child) {
                 List<Message>? messages = chat.chat?.messages;
