@@ -35,6 +35,8 @@ class PeopleBody extends StatelessWidget {
                   return GridView.builder(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
+                      mainAxisSpacing: 20,
+                      crossAxisSpacing: 8,
                       crossAxisCount: 2,
                     ),
                     itemCount: provider.users!.length,
