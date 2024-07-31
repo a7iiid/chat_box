@@ -59,7 +59,7 @@ class _ChatBodyState extends State<ChatBody> {
             ),
             Expanded(
               child: Consumer<ChatProvider>(builder: (context, chat, child) {
-                List<Message>? messages = chat.chat?.messages;
+                List<Message>? messages = chat.selectChat?.messages;
                 if (messages != null && messages.isNotEmpty) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     _scrollToBottom();

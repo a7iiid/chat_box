@@ -1,25 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Conversation {
-  final String id;
+  String? id;
   String? chatId;
   String? name;
   String? image;
   String? lastMessage;
   Timestamp? timestamp;
+  String? receiverId;
 
-  Conversation({
-    required this.id,
-    this.chatId,
-    this.name,
-    this.image,
-    this.lastMessage,
-    this.timestamp,
-  });
+  Conversation(
+      {this.id,
+      this.chatId,
+      this.name,
+      this.image,
+      this.lastMessage,
+      this.timestamp,
+      this.receiverId});
 
   factory Conversation.fromJson(Map<String, dynamic> json, String ID) {
     return Conversation(
       id: ID,
+      receiverId: json['receiver'],
       chatId: json['chatId'],
       name: json['name'],
       image: json['image'],

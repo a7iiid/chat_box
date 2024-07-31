@@ -29,7 +29,6 @@ class _SplashBodyState extends State<SplashBody> with TickerProviderStateMixin {
   void initState() {
     if (FirebaseAuth.instance.currentUser != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        await Provider.of<UserProvider>(context, listen: false).loadUserData();
         await Provider.of<UserProvider>(context, listen: false)
             .loadAllUserData();
       });

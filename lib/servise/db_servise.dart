@@ -33,25 +33,6 @@ class DbService {
     });
   }
 
-  Future<UserModel> loadUserData() async {
-    var userDoc = await _db
-        .collection(_userCollection)
-        .doc(_authUser.currentUser!.uid)
-        .get();
-    var conversationDocs = await _db
-        .collection(_userCollection)
-        .doc(_authUser.currentUser!.uid)
-        .collection(_chatCollection)
-        .get();
-
-    List<Conversation> conversations = conversationDocs.docs
-        .map((doc) => Conversation.fromJson(doc.data(), doc.id))
-        .toList();
-
-    return UserModel.fromJson(
-        userDoc.data() as Map<String, dynamic>, conversations);
-  }
-
   Future<List<UserModel>> loadAllUsersData() async {
     var userDocs = await _db.collection(_userCollection).get();
     List<UserModel> users = [];
@@ -68,7 +49,7 @@ class DbService {
           .toList();
 
       users.add(UserModel.fromJson(
-          userDoc.data() as Map<String, dynamic>, conversations));
+          userDoc.data() as Map<String, dynamic>, conversations, userDoc.id));
     }
 
     return users;
@@ -76,8 +57,8 @@ class DbService {
 
   Stream<Chat?> streamChat(String chatId) {
     return _db.collection(_chatCollection).doc(chatId).snapshots().map(
-        (querySnapshot) =>
-            Chat.fromJson(querySnapshot.data() as Map<String, dynamic>));
+        (querySnapshot) => Chat.fromJson(
+            querySnapshot.data() as Map<String, dynamic>, querySnapshot.id));
   }
 
   Future<void> sendMessage(
@@ -113,4 +94,12 @@ class DbService {
       log('Failed to update conversation: $e');
     }
   }
+
+  // Future<Chat?> getChat(String receiverId) async {
+  //   var doc = await _db.collection(_chatCollection).where('members',
+  //       arrayContains: [receiverId, _authUser.currentUser!.uid]).get();
+  //   final Chat chat = Chat.fromJson(
+  //       doc.docs.first.data() as Map<String, dynamic>, doc.docs.first.id);
+  //   return chat;
+  // }
 }

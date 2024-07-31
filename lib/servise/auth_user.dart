@@ -15,7 +15,6 @@ class AuthUser {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      await Provider.of<UserProvider>(context, listen: false).loadUserData();
       await Provider.of<UserProvider>(context, listen: false).loadAllUserData();
       GoRouter.of(context).pushReplacement(Routes.kHomePage);
 

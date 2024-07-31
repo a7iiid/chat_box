@@ -24,7 +24,7 @@ class ChatProvider with ChangeNotifier {
   static ChatProvider get(BuildContext context) =>
       Provider.of<ChatProvider>(context);
 
-  Chat? chat;
+  Chat? selectChat;
   ChatStatus status = ChatStatus.loadingMessages;
   late StreamSubscription<Chat?> _chatSubscription;
 
@@ -35,10 +35,10 @@ class ChatProvider with ChangeNotifier {
     try {
       _chatSubscription =
           DbService.instance.streamChat(chatId).listen((fetchedChat) {
-        chat = fetchedChat;
-        if (chat != null &&
-            chat!.messages != null &&
-            chat!.messages!.isNotEmpty) {
+        selectChat = fetchedChat;
+        if (selectChat != null &&
+            selectChat!.messages != null &&
+            selectChat!.messages!.isNotEmpty) {
           status = ChatStatus.successLoadMessage;
         } else {
           status = ChatStatus.isEmptyMessages;
@@ -62,6 +62,32 @@ class ChatProvider with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  // Future<void> checkChat(String receiverId) async {
+  //   status = ChatStatus.successLoadConversation;
+  //   notifyListeners();
+
+  //   try {
+  //     final chat = await DbService.instance.getChat(receiverId);
+  //     if (chat!.id != null) {
+  //       _chatSubscription =
+  //           DbService.instance.streamChat(chat.id!).listen((fetchedChat) {
+  //         selectChat = fetchedChat;
+  //         if (selectChat != null &&
+  //             selectChat!.messages != null &&
+  //             selectChat!.messages!.isNotEmpty) {
+  //           status = ChatStatus.successLoadMessage;
+  //         } else {
+  //           status = ChatStatus.isEmptyMessages;
+  //         }
+  //         notifyListeners();
+  //       });
+  //     }
+  //   } catch (_) {
+  //     status = ChatStatus.errorLoadUserMessage;
+  //     notifyListeners();
+  //   }
+  // }
 
   @override
   void dispose() {

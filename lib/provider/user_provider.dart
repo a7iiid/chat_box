@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:chat_app/model/conversation.dart';
 import 'package:chat_app/model/user.dart';
 import 'package:chat_app/servise/db_servise.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +22,12 @@ class UserProvider with ChangeNotifier {
   UserStat userStat = UserStat.initUser;
   List<UserModel>? users;
   Conversation? _selectConversation;
+  UserModel? _selecteUser;
+  UserModel? get selectUser => _selecteUser;
+  set selectUser(UserModel? user) {
+    _selecteUser = user;
+    notifyListeners();
+  }
 
   Conversation? get selectConversation => _selectConversation;
 
@@ -30,25 +37,17 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadUserData() async {
-    userStat = UserStat.loadingUser;
-    notifyListeners();
-    try {
-      user = await DbService.instance.loadUserData();
-      log(user.toString());
-      userStat = UserStat.userLoaded;
-    } on Exception catch (_) {
-      userStat = UserStat.userError;
-    }
-    notifyListeners();
-  }
-
   Future<void> loadAllUserData() async {
     userStat = UserStat.loadingUser;
     notifyListeners();
     try {
       users = await DbService.instance.loadAllUsersData();
-      log(users.toString());
+      for (UserModel u in users!) {
+        if (u.id == FirebaseAuth.instance.currentUser!.uid) {
+          user = u;
+          break;
+        }
+      }
       userStat = UserStat.userLoaded;
     } on Exception catch (_) {
       userStat = UserStat.userError;
