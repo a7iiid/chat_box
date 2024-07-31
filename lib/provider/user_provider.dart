@@ -16,14 +16,6 @@ enum UserStat {
   userError,
   userNotLoaded,
   userNotLoadedError,
-  loadingConversation,
-  loadingMessages,
-  successLoadMessage,
-  successLoadConversation,
-  successLoadUser,
-  successLoadUserConversation,
-  successLoadUserMessage,
-  errorLoadUserMessage,
 }
 
 class UserProvider with ChangeNotifier {
@@ -31,7 +23,7 @@ class UserProvider with ChangeNotifier {
   UserModel? user;
   UserStat userStat = UserStat.initUser;
   List<UserModel>? listUsers;
-  List<Chat>? chates;
+
   Future<void> loadUserData() async {
     userStat = UserStat.loadingUser;
     notifyListeners();
@@ -41,18 +33,6 @@ class UserProvider with ChangeNotifier {
       userStat = UserStat.userLoaded;
     } on Exception catch (_) {
       userStat = UserStat.userError;
-    }
-    notifyListeners();
-  }
-
-  Future<void> loadChatUser() async {
-    userStat = UserStat.loadingConversation;
-    notifyListeners();
-    try {
-      chates = await DbService.instance.loadChatUser();
-      userStat = UserStat.successLoadMessage;
-    } catch (_) {
-      userStat = UserStat.errorLoadUserMessage;
     }
     notifyListeners();
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widget/ListMassege.dart';
+import '../widget/LastMessages.dart';
 import '../widget/hedar_home.dart';
 import '../widget/status.dart';
 
@@ -24,7 +24,7 @@ class RecantMessages extends StatelessWidget {
         Positioned(
           width: MediaQuery.of(context).size.width,
           top: 130,
-          bottom: MediaQuery.of(context).size.height * 0.7,
+          bottom: MediaQuery.of(context).size.height * 0.6,
           child: const Status(),
         ),
         Positioned(

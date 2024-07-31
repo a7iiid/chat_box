@@ -21,6 +21,8 @@ class LastMessages extends StatefulWidget {
 class _LastMessagesState extends State<LastMessages> {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   List<Conversation>? conversation;
+  late UserProvider userProvider;
+
   @override
   void initState() {
     super.initState();
@@ -31,7 +33,7 @@ class _LastMessagesState extends State<LastMessages> {
     super.didChangeDependencies();
     conversation = UserProvider.get(context).user?.conversation;
 
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    userProvider = Provider.of<UserProvider>(context, listen: false);
     // Use the userProvider instance here
   }
 
@@ -107,51 +109,54 @@ class _LastMessagesState extends State<LastMessages> {
             key: _listKey,
             initialItemCount: conversation?.length ?? 0,
             itemBuilder: (context, index, animation) {
-              return InkWell(
-                onTap: () {
-                  GoRouter.of(context).push(Routes.kChat);
-                },
-                child: Slidable(
-                  key: ValueKey(conversation?[index]),
-                  direction: Axis.horizontal,
-                  endActionPane: ActionPane(
-                    // A motion is a widget used to control how the pane animates.
-                    motion: const ScrollMotion(),
-                    dragDismissible: true,
+              if (userProvider.userStat != UserStat.loadingUser) {
+                return InkWell(
+                  onTap: () {
+                    GoRouter.of(context).push(Routes.kChat);
+                  },
+                  child: Slidable(
+                    key: ValueKey(conversation?[index]),
+                    direction: Axis.horizontal,
+                    endActionPane: ActionPane(
+                      // A motion is a widget used to control how the pane animates.
+                      motion: const ScrollMotion(),
+                      dragDismissible: true,
 
-                    // A pane can dismiss the Slidable.
-                    dismissible: DismissiblePane(onDismissed: () {}),
+                      // A pane can dismiss the Slidable.
+                      dismissible: DismissiblePane(onDismissed: () {}),
 
-                    // All actions are defined in the children parameter.
-                    children: [
-                      Spacer(),
-                      InkWell(
-                        onTap: () {},
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: CircleAvatar(
-                            backgroundColor: Colors.black,
-                            child: SvgPicture.asset(Assets.imageNotification),
+                      // All actions are defined in the children parameter.
+                      children: [
+                        Spacer(),
+                        InkWell(
+                          onTap: () {},
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: CircleAvatar(
+                              backgroundColor: Colors.black,
+                              child: SvgPicture.asset(Assets.imageNotification),
+                            ),
                           ),
                         ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          _removeItem(index);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: CircleAvatar(
-                            backgroundColor: Colors.red,
-                            child: SvgPicture.asset(Assets.imageTrash),
+                        InkWell(
+                          onTap: () {
+                            _removeItem(index);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CircleAvatar(
+                              backgroundColor: Colors.red,
+                              child: SvgPicture.asset(Assets.imageTrash),
+                            ),
                           ),
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
+                    child: _buildItem(conversation![index], animation),
                   ),
-                  child: _buildItem(conversation![index], animation),
-                ),
-              );
+                );
+              }
+              return SizedBox();
             },
           );
         }),

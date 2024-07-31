@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:chat_app/model/chat.dart';
 import 'package:chat_app/model/conversation.dart';
+import 'package:chat_app/model/message.dart';
 import 'package:chat_app/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,7 +16,7 @@ class DbService {
   FirebaseAuth _authUser;
   String _userCollection = 'users';
   String _chatCollection = 'conversation';
-
+  Chat? chat;
   DbService()
       : _db = FirebaseFirestore.instance,
         _authUser = FirebaseAuth.instance,
@@ -52,13 +53,19 @@ class DbService {
         userDoc.data() as Map<String, dynamic>, conversations);
   }
 
-  Future<List<Chat>> loadChatUser() {
-    return FirebaseFirestore.instance
+  Stream<Chat?> streamchat(String chatId) async* {
+    yield* FirebaseFirestore.instance
         .collection(_chatCollection)
-        .where('members', arrayContains: _authUser.currentUser!.uid)
-        .get()
-        .then((value) {
-      return value.docs.map((doc) => Chat.fromJson(doc.data())).toList();
+        .doc(chatId)
+        .snapshots()
+        .map((querySnapshot) =>
+            Chat.fromJson(querySnapshot.data() as Map<String, dynamic>));
+  }
+
+  Future<Chat?> loadChatUser(String chatId) async {
+    streamchat(chatId).listen((fetchedChat) async {
+      chat = fetchedChat;
     });
+    return chat;
   }
 }

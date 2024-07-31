@@ -9,7 +9,7 @@ class Status extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height - 130, // Constrain height
+      height: MediaQuery.of(context).size.height - 130,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: 15,
