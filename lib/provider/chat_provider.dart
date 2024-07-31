@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:chat_app/model/message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:chat_app/model/chat.dart';
@@ -15,6 +16,7 @@ enum ChatStatus {
   errorLoadUserMessage,
   isEmptyMessages,
   sendMessage,
+  sendingMessage,
   errorSendMessage,
 }
 
@@ -49,7 +51,18 @@ class ChatProvider with ChangeNotifier {
     }
   }
 
-  Future<void> sendMessage(String message) {}
+  Future<void> sendMessage(Message message, String chatId) async {
+    status = ChatStatus.sendingMessage;
+    notifyListeners();
+    try {
+      await DbService.instance.sendMessage(message, chatId);
+      status = ChatStatus.sendMessage;
+    } catch (e) {
+      status = ChatStatus.errorSendMessage;
+    }
+    notifyListeners();
+  }
+
   @override
   void dispose() {
     _chatSubscription.cancel();

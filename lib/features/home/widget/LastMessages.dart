@@ -1,10 +1,9 @@
 import 'package:chat_app/core/utils/router/routs.dart';
 import 'package:chat_app/model/conversation.dart';
-import 'package:chat_app/model/user.dart';
 import 'package:chat_app/provider/chat_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -32,10 +31,8 @@ class _LastMessagesState extends State<LastMessages> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    conversation = UserProvider.get(context).user?.conversation;
-
-    userProvider = Provider.of<UserProvider>(context, listen: false);
-    // Use the userProvider instance here
+    userProvider = UserProvider.get(context);
+    conversation = userProvider.user?.conversation;
   }
 
   void _removeItem(int index) {
@@ -54,7 +51,7 @@ class _LastMessagesState extends State<LastMessages> {
     return SizeTransition(
       sizeFactor: animation,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0), // Add padding
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Row(
           children: [
             CircleAvatar(
@@ -65,8 +62,7 @@ class _LastMessagesState extends State<LastMessages> {
               width: 12,
             ),
             Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start, // Align text to the start
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   conversation.name!,
@@ -93,7 +89,7 @@ class _LastMessagesState extends State<LastMessages> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.7, // Constrain height
+      height: MediaQuery.of(context).size.height * 0.7,
       decoration: const ShapeDecoration(
         color: Colors.white,
         shape: RoundedRectangleBorder(
@@ -104,7 +100,7 @@ class _LastMessagesState extends State<LastMessages> {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16.0), // Add padding
+        padding: const EdgeInsets.all(16.0),
         child: Builder(builder: (context) {
           return AnimatedList(
             key: _listKey,
@@ -113,7 +109,7 @@ class _LastMessagesState extends State<LastMessages> {
               if (userProvider.userStat != UserStat.loadingUser) {
                 return InkWell(
                   onTap: () {
-                    userProvider.setConversation(conversation![index]);
+                    userProvider.selectConversation = conversation![index];
                     Provider.of<ChatProvider>(context, listen: false)
                         .loadChatUser(conversation![index].chatId!);
                     GoRouter.of(context).push(Routes.kChat);
@@ -122,14 +118,9 @@ class _LastMessagesState extends State<LastMessages> {
                     key: ValueKey(conversation?[index]),
                     direction: Axis.horizontal,
                     endActionPane: ActionPane(
-                      // A motion is a widget used to control how the pane animates.
                       motion: const ScrollMotion(),
                       dragDismissible: true,
-
-                      // A pane can dismiss the Slidable.
                       dismissible: DismissiblePane(onDismissed: () {}),
-
-                      // All actions are defined in the children parameter.
                       children: [
                         Spacer(),
                         InkWell(

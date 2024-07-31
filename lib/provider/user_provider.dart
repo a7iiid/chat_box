@@ -1,14 +1,12 @@
+import 'dart:async';
 import 'dart:developer';
-
 import 'package:chat_app/model/conversation.dart';
 import 'package:chat_app/model/user.dart';
 import 'package:chat_app/servise/db_servise.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
-
-import '../model/chat.dart';
 
 enum UserStat {
   initUser,
@@ -24,7 +22,22 @@ class UserProvider with ChangeNotifier {
   UserModel? user;
   UserStat userStat = UserStat.initUser;
   List<UserModel>? listUsers;
-  late Conversation selectConversation;
+  Conversation? _selectConversation;
+  final StreamController<Conversation> _conversationController =
+      StreamController<Conversation>.broadcast();
+
+  Stream<Conversation> get conversationStream => _conversationController.stream;
+
+  Conversation? get selectConversation => _selectConversation;
+
+  set selectConversation(Conversation? conversation) {
+    _selectConversation = conversation;
+    if (conversation != null) {
+      _conversationController.add(conversation);
+      _updateConversationInFirebase(conversation);
+    }
+    notifyListeners();
+  }
 
   Future<void> loadUserData() async {
     userStat = UserStat.loadingUser;
@@ -39,7 +52,18 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setConversation(Conversation conversation) {
-    selectConversation = conversation;
+  Future<void> _updateConversationInFirebase(Conversation conversation) async {
+    if (_selectConversation == null) return;
+    try {
+      await DbService.instance.updateConversation(conversation);
+    } catch (e) {
+      log('Failed to update conversation in Firebase: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    _conversationController.close();
+    super.dispose();
   }
 }

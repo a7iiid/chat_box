@@ -54,4 +54,27 @@ class DbService {
         (querySnapshot) =>
             Chat.fromJson(querySnapshot.data() as Map<String, dynamic>));
   }
+
+  Future<void> sendMessage(Message message, String chatId) async {
+    try {
+      await _db.collection(_chatCollection).doc(chatId).update({
+        'messages': FieldValue.arrayUnion([message.toJson()])
+      });
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future<void> updateConversation(Conversation conversation) async {
+    try {
+      await _db
+          .collection(_userCollection)
+          .doc(_authUser.currentUser!.uid)
+          .collection(_chatCollection)
+          .doc(conversation.chatId)
+          .update(conversation.toJson());
+    } catch (e) {
+      log('Failed to update conversation: $e');
+    }
+  }
 }

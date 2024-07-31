@@ -13,7 +13,7 @@ class Chat extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text(Provider.of<UserProvider>(context, listen: false)
-            .selectConversation
+            .selectConversation!
             .name!),
       ),
       body: ChatBody(),

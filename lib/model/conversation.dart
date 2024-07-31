@@ -26,4 +26,11 @@ class Conversation {
       unseenCount: json['unseenCount'],
     );
   }
+  Map<String, dynamic> toJson() {
+    return {
+      'lastMessage': lastMessage,
+      'unseenCount': unseenCount,
+      'timestamp': timestamp
+    };
+  }
 }
