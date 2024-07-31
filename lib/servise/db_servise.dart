@@ -3,9 +3,12 @@ import 'package:chat_app/model/chat.dart';
 import 'package:chat_app/model/conversation.dart';
 import 'package:chat_app/model/message.dart';
 import 'package:chat_app/model/user.dart';
+import 'package:chat_app/provider/user_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DbService {
   static final DbService instance = DbService();
@@ -42,7 +45,7 @@ class DbService {
         .get();
 
     List<Conversation> conversations = conversationDocs.docs
-        .map((doc) => Conversation.fromJson(doc.data()))
+        .map((doc) => Conversation.fromJson(doc.data(), doc.id))
         .toList();
 
     return UserModel.fromJson(
@@ -55,11 +58,22 @@ class DbService {
             Chat.fromJson(querySnapshot.data() as Map<String, dynamic>));
   }
 
-  Future<void> sendMessage(Message message, String chatId) async {
+  Future<void> sendMessage(
+      Message message, String chatId, BuildContext context) async {
     try {
+      var selectConversation =
+          Provider.of<UserProvider>(context, listen: false).selectConversation;
       await _db.collection(_chatCollection).doc(chatId).update({
         'messages': FieldValue.arrayUnion([message.toJson()])
       });
+      selectConversation = Conversation(
+          id: selectConversation!.id,
+          chatId: selectConversation.chatId,
+          image: selectConversation.image,
+          lastMessage: message.message,
+          name: selectConversation.name,
+          timestamp: message.timestamp);
+      await updateConversation(selectConversation);
     } catch (e) {
       log(e.toString());
     }
@@ -71,7 +85,7 @@ class DbService {
           .collection(_userCollection)
           .doc(_authUser.currentUser!.uid)
           .collection(_chatCollection)
-          .doc(conversation.chatId)
+          .doc(conversation.id)
           .update(conversation.toJson());
     } catch (e) {
       log('Failed to update conversation: $e');

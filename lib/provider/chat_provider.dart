@@ -51,12 +51,12 @@ class ChatProvider with ChangeNotifier {
     }
   }
 
-  Future<void> sendMessage(Message message, String chatId) async {
+  Future<void> sendMessage(
+      Message message, String chatId, BuildContext context) async {
     status = ChatStatus.sendingMessage;
     notifyListeners();
     try {
-      await DbService.instance.sendMessage(message, chatId);
-      status = ChatStatus.sendMessage;
+      DbService.instance.sendMessage(message, chatId, context);
     } catch (e) {
       status = ChatStatus.errorSendMessage;
     }
