@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:chat_app/model/message.dart';
+import 'package:chat_app/model/user.dart';
+import 'package:chat_app/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:chat_app/model/chat.dart';
@@ -63,31 +65,14 @@ class ChatProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // Future<void> checkChat(String receiverId) async {
-  //   status = ChatStatus.successLoadConversation;
-  //   notifyListeners();
-
-  //   try {
-  //     final chat = await DbService.instance.getChat(receiverId);
-  //     if (chat!.id != null) {
-  //       _chatSubscription =
-  //           DbService.instance.streamChat(chat.id!).listen((fetchedChat) {
-  //         selectChat = fetchedChat;
-  //         if (selectChat != null &&
-  //             selectChat!.messages != null &&
-  //             selectChat!.messages!.isNotEmpty) {
-  //           status = ChatStatus.successLoadMessage;
-  //         } else {
-  //           status = ChatStatus.isEmptyMessages;
-  //         }
-  //         notifyListeners();
-  //       });
-  //     }
-  //   } catch (_) {
-  //     status = ChatStatus.errorLoadUserMessage;
-  //     notifyListeners();
-  //   }
-  // }
+  Future<void> createChat(
+      UserModel receiver, UserModel sender, BuildContext context) async {
+    status = ChatStatus.successLoadConversation;
+    notifyListeners();
+    var provider = Provider.of<UserProvider>(context, listen: false);
+    provider.selectConversation =
+        await DbService.instance.createChat(receiver, sender, context);
+  }
 
   @override
   void dispose() {

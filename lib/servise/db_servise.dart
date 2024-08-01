@@ -3,6 +3,7 @@ import 'package:chat_app/model/chat.dart';
 import 'package:chat_app/model/conversation.dart';
 import 'package:chat_app/model/message.dart';
 import 'package:chat_app/model/user.dart';
+import 'package:chat_app/provider/chat_provider.dart';
 import 'package:chat_app/provider/user_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -69,12 +70,32 @@ class DbService {
       await _db.collection(_chatCollection).doc(chatId).update({
         'messages': FieldValue.arrayUnion([message.toJson()])
       });
+      var chat = Provider.of<ChatProvider>(context, listen: false).selectChat;
+      for (String member in chat!.members) {
+        if (member != _authUser.currentUser!.uid) {
+          bool exists = await conversationExists(member, chatId);
+          if (!exists) {
+            await createConversation(
+                Conversation(
+                    id: selectConversation!.id,
+                    chatId: selectConversation.chatId,
+                    image: selectConversation.image,
+                    lastMessage: message.message,
+                    name: selectConversation.name,
+                    receiverId: _authUser.currentUser!.uid,
+                    timestamp: message.timestamp),
+                member);
+          }
+        }
+      }
+
       selectConversation = Conversation(
           id: selectConversation!.id,
           chatId: selectConversation.chatId,
           image: selectConversation.image,
           lastMessage: message.message,
           name: selectConversation.name,
+          receiverId: selectConversation.receiverId,
           timestamp: message.timestamp);
       await updateConversation(selectConversation);
     } catch (e) {
@@ -95,11 +116,52 @@ class DbService {
     }
   }
 
-  // Future<Chat?> getChat(String receiverId) async {
-  //   var doc = await _db.collection(_chatCollection).where('members',
-  //       arrayContains: [receiverId, _authUser.currentUser!.uid]).get();
-  //   final Chat chat = Chat.fromJson(
-  //       doc.docs.first.data() as Map<String, dynamic>, doc.docs.first.id);
-  //   return chat;
-  // }
+  Future<Conversation?> createChat(
+      UserModel receiver, UserModel sender, BuildContext context) async {
+    Chat chat = Chat(members: [receiver.id, sender.id]);
+
+    try {
+      var response = await _db.collection(_chatCollection).add(chat.toJson());
+      chat.id = response.id;
+      Provider.of<ChatProvider>(context, listen: false).loadChatUser(chat.id!);
+
+      Conversation conversation = Conversation(
+          chatId: chat.id,
+          image: receiver.image,
+          lastMessage: '',
+          receiverId: receiver.id,
+          name: receiver.name,
+          timestamp: Timestamp.now());
+
+      return await createConversation(conversation, _authUser.currentUser!.uid);
+    } catch (_) {
+      log('Failed to create chat');
+    }
+  }
+
+  Future<bool> conversationExists(String uid, String chatId) async {
+    var snapshot = await _db
+        .collection(_userCollection)
+        .doc(uid)
+        .collection(_chatCollection)
+        .where('chatId', isEqualTo: chatId)
+        .get();
+
+    return snapshot.docs.isNotEmpty;
+  }
+
+  Future<Conversation?> createConversation(
+      Conversation conversation, String uid) async {
+    try {
+      var response = await _db
+          .collection(_userCollection)
+          .doc(uid)
+          .collection(_chatCollection)
+          .add(conversation.toJson());
+      conversation.id = response.id;
+      return conversation;
+    } catch (e) {
+      log('Failed to create conversation: $e');
+    }
+  }
 }

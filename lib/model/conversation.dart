@@ -21,7 +21,7 @@ class Conversation {
   factory Conversation.fromJson(Map<String, dynamic> json, String ID) {
     return Conversation(
       id: ID,
-      receiverId: json['receiver'],
+      receiverId: json['receiverId'],
       chatId: json['chatId'],
       name: json['name'],
       image: json['image'],
@@ -32,6 +32,7 @@ class Conversation {
 
   Map<String, dynamic> toJson() {
     return {
+      'receiverId': receiverId,
       'chatId': chatId,
       'name': name,
       'image': image,

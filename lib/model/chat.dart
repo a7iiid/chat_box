@@ -1,7 +1,7 @@
 import 'message.dart';
 
 class Chat {
-  final String? id;
+  String? id;
   List<String> members;
   List<Message>? messages;
   Chat({required this.members, this.messages, this.id});
