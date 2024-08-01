@@ -34,26 +34,32 @@ class DbService {
     });
   }
 
-  Future<List<UserModel>> loadAllUsersData() async {
-    var userDocs = await _db.collection(_userCollection).get();
-    List<UserModel> users = [];
+  Stream<List<UserModel>> streamAllUsersData() {
+    return _db
+        .collection(_userCollection)
+        .snapshots()
+        .asyncMap((userDocs) async {
+      List<UserModel> users = [];
 
-    for (var userDoc in userDocs.docs) {
-      var conversationDocs = await _db
-          .collection(_userCollection)
-          .doc(userDoc.id)
-          .collection(_chatCollection)
-          .get();
+      for (var userDoc in userDocs.docs) {
+        var conversationStream = _db
+            .collection(_userCollection)
+            .doc(userDoc.id)
+            .collection(_chatCollection)
+            .snapshots();
 
-      List<Conversation> conversations = conversationDocs.docs
-          .map((doc) => Conversation.fromJson(doc.data(), doc.id))
-          .toList();
+        var conversationDocs = await conversationStream.first;
 
-      users.add(UserModel.fromJson(
-          userDoc.data() as Map<String, dynamic>, conversations, userDoc.id));
-    }
+        List<Conversation> conversations = conversationDocs.docs
+            .map((doc) => Conversation.fromJson(doc.data(), doc.id))
+            .toList();
 
-    return users;
+        users.add(UserModel.fromJson(
+            userDoc.data() as Map<String, dynamic>, conversations, userDoc.id));
+      }
+
+      return users;
+    });
   }
 
   Stream<Chat?> streamChat(String chatId) {
@@ -67,9 +73,11 @@ class DbService {
     try {
       var selectConversation =
           Provider.of<UserProvider>(context, listen: false).selectConversation;
+
       await _db.collection(_chatCollection).doc(chatId).update({
         'messages': FieldValue.arrayUnion([message.toJson()])
       });
+
       var chat = Provider.of<ChatProvider>(context, listen: false).selectChat;
       for (String member in chat!.members) {
         if (member != _authUser.currentUser!.uid) {
@@ -97,9 +105,53 @@ class DbService {
           name: selectConversation.name,
           receiverId: selectConversation.receiverId,
           timestamp: message.timestamp);
+
       await updateConversation(selectConversation);
+      await updateLastMessageInConversation(
+          chatId, message.message, message.timestamp);
     } catch (e) {
       log(e.toString());
+    }
+  }
+
+  Stream<List<Conversation>> streamUserConversations(String userId) {
+    return _db
+        .collection(_userCollection)
+        .doc(userId)
+        .collection(_chatCollection)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs
+          .map((doc) => Conversation.fromJson(doc.data(), doc.id))
+          .toList();
+    });
+  }
+
+  Future<void> updateLastMessageInConversation(
+      String chatId, String lastMessage, Timestamp timestamp) async {
+    try {
+      var chat = await _db.collection(_chatCollection).doc(chatId).get();
+      if (chat.exists) {
+        var members = List<String>.from(chat.data()!['members']);
+        for (var member in members) {
+          var conversationSnapshot = await _db
+              .collection(_userCollection)
+              .doc(member)
+              .collection(_chatCollection)
+              .where('chatId', isEqualTo: chatId)
+              .get();
+
+          if (conversationSnapshot.docs.isNotEmpty) {
+            var conversationDoc = conversationSnapshot.docs.first;
+            await conversationDoc.reference.update({
+              'lastMessage': lastMessage,
+              'timestamp': timestamp,
+            });
+          }
+        }
+      }
+    } catch (e) {
+      log('Failed to update last message in conversation: $e');
     }
   }
 

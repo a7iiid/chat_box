@@ -21,23 +21,20 @@ class LastMessages extends StatefulWidget {
 
 class _LastMessagesState extends State<LastMessages> {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
-  List<Conversation>? conversation;
-  late UserProvider userProvider;
 
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    userProvider = UserProvider.get(context);
-    conversation = userProvider.user?.conversation;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<UserProvider>(context, listen: false)
+          .streamUserConversations();
+    });
   }
 
   void _removeItem(int index) {
-    Conversation removedMessage = conversation!.removeAt(index);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    Conversation removedMessage =
+        userProvider.user!.conversation!.removeAt(index);
     _listKey.currentState?.removeItem(
       index,
       (context, animation) => SizeTransition(
@@ -91,32 +88,38 @@ class _LastMessagesState extends State<LastMessages> {
     return MainShap(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Builder(builder: (context) {
-          return AnimatedList(
-            key: _listKey,
-            initialItemCount: conversation!.length,
-            itemBuilder: (context, index, animation) {
-              if (userProvider.userStat != UserStat.loadingUser) {
+        child: Consumer<UserProvider>(
+          builder: (context, userProvider, child) {
+            final conversation = userProvider.user?.conversation;
+            if (userProvider.userStat == UserStat.loadingUser ||
+                conversation == null) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            return AnimatedList(
+              key: _listKey,
+              initialItemCount: conversation.length,
+              itemBuilder: (context, index, animation) {
                 return InkWell(
                   onTap: () {
-                    userProvider.selectConversation = conversation![index];
+                    userProvider.selectConversation = conversation[index];
                     Provider.of<ChatProvider>(context, listen: false)
-                        .loadChatUser(conversation![index].chatId!);
+                        .loadChatUser(conversation[index].chatId!);
                     GoRouter.of(context).push(Routes.kChat);
                   },
                   child: Slidable(
-                    key: ValueKey(conversation?[index]),
+                    key: ValueKey(conversation[index]),
                     direction: Axis.horizontal,
                     endActionPane: ActionPane(
                       motion: const ScrollMotion(),
                       dragDismissible: true,
                       dismissible: DismissiblePane(onDismissed: () {}),
                       children: [
-                        Spacer(),
+                        const Spacer(),
                         InkWell(
                           onTap: () {},
                           child: Padding(
-                            padding: EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(8.0),
                             child: CircleAvatar(
                               backgroundColor: Colors.black,
                               child: SvgPicture.asset(Assets.imageNotification),
@@ -137,14 +140,13 @@ class _LastMessagesState extends State<LastMessages> {
                         )
                       ],
                     ),
-                    child: _buildItem(conversation![index], animation),
+                    child: _buildItem(conversation[index], animation),
                   ),
                 );
-              }
-              return const SizedBox();
-            },
-          );
-        }),
+              },
+            );
+          },
+        ),
       ),
     );
   }

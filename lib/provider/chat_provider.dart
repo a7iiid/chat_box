@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:chat_app/model/message.dart';
 import 'package:chat_app/model/user.dart';
@@ -58,9 +59,11 @@ class ChatProvider with ChangeNotifier {
     status = ChatStatus.sendingMessage;
     notifyListeners();
     try {
-      DbService.instance.sendMessage(message, chatId, context);
+      await DbService.instance.sendMessage(message, chatId, context);
+      status = ChatStatus.sendMessage;
     } catch (e) {
       status = ChatStatus.errorSendMessage;
+      log(e.toString());
     }
     notifyListeners();
   }

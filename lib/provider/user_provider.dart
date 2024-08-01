@@ -24,6 +24,9 @@ class UserProvider with ChangeNotifier {
   Conversation? _selectConversation;
   UserModel? _selecteUser;
   UserModel? get selectUser => _selecteUser;
+  StreamSubscription<List<UserModel>>? _userSubscription;
+  StreamSubscription<List<Conversation>>? _conversationSubscription;
+
   set selectUser(UserModel? user) {
     _selecteUser = user;
     notifyListeners();
@@ -37,21 +40,45 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadAllUserData() async {
+  void loadAllUserData() {
     userStat = UserStat.loadingUser;
     notifyListeners();
-    try {
-      users = await DbService.instance.loadAllUsersData();
-      for (UserModel u in users!) {
-        if (u.id == FirebaseAuth.instance.currentUser!.uid) {
-          user = u;
-          break;
+
+    _userSubscription = DbService.instance.streamAllUsersData().listen(
+      (userList) {
+        users = userList;
+        for (UserModel u in users!) {
+          if (u.id == FirebaseAuth.instance.currentUser!.uid) {
+            user = u;
+            break;
+          }
         }
-      }
-      userStat = UserStat.userLoaded;
-    } on Exception catch (_) {
-      userStat = UserStat.userError;
+        userStat = UserStat.userLoaded;
+        notifyListeners();
+      },
+      onError: (_) {
+        userStat = UserStat.userError;
+        notifyListeners();
+      },
+    );
+  }
+
+  void streamUserConversations() {
+    if (user != null) {
+      _conversationSubscription?.cancel();
+      _conversationSubscription = DbService.instance
+          .streamUserConversations(user!.id)
+          .listen((conversations) {
+        user!.conversation = conversations;
+        notifyListeners();
+      });
     }
-    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _userSubscription?.cancel();
+    _conversationSubscription?.cancel();
+    super.dispose();
   }
 }
