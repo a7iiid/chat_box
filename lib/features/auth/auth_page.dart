@@ -29,13 +29,13 @@ class AuthPage extends StatelessWidget {
                   0.05, // Adjust position based on your design
               child: SvgPicture.asset(Assets.imageEllipse),
             ),
-            Positioned(
-              top: 40,
-              left: 0,
-              right: 0,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: SingleChildScrollView(
+            SingleChildScrollView(
+              child: Positioned(
+                top: 40,
+                left: 0,
+                right: 0,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [

@@ -1,4 +1,5 @@
 import 'package:chat_app/provider/Home_provider.dart';
+import 'package:chat_app/servise/auth_user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +14,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  @override
+  void initState() {
+    AuthUser.onUserLogin();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(

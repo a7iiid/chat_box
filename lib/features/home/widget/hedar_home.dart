@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:chat_app/core/utils/router/routs.dart';
 import 'package:provider/provider.dart';
+import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 
 class HedarHome extends StatelessWidget {
   const HedarHome({
@@ -41,14 +42,12 @@ class HedarHome extends StatelessWidget {
         InkWell(
           onTap: () async {
             await FirebaseAuth.instance.signOut();
+            ZegoUIKitPrebuiltCallInvitationService().uninit();
+
             GoRouter.of(context).pushReplacement(Routes.kAuthpage);
           },
           child: Consumer<UserProvider>(
             builder: (context, user, child) {
-              log(user.userStat.toString());
-              if (user.user != null) {
-                log(user.user!.image.toString());
-              }
               return user.userStat != UserStat.loadingUser
                   ? CircleAvatar(
                       radius: 22,

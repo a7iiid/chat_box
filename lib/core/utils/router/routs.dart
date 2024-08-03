@@ -6,6 +6,8 @@ import 'package:chat_app/features/chat/chat.dart';
 import 'package:chat_app/features/home/Home.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../main.dart';
+
 abstract class Routes {
   static const kLoginScreen = '/signinscreen';
   static const kSignUpScreen = '/signupscreen';
@@ -15,7 +17,7 @@ abstract class Routes {
   static const kEditProfilePage = '/editProfile';
   static const kChat = '/chat';
 
-  static final router = GoRouter(routes: [
+  static final router = GoRouter(navigatorKey: navigatorKey, routes: [
     GoRoute(
       path: '/',
       builder: (context, state) {

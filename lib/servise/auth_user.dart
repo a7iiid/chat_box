@@ -1,7 +1,10 @@
+import 'package:chat_app/core/utils/Key.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
+import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
 import '../core/utils/router/routs.dart';
 import '../provider/user_provider.dart';
@@ -22,6 +25,19 @@ class AuthUser {
     } catch (e) {
       return "Failed";
     }
+  }
+
+  static void onUserLogin() {
+    /// 1.2.1. initialized ZegoUIKitPrebuiltCallInvitationService
+    /// when app's user is logged in or re-logged in
+    /// We recommend calling this method as soon as the user logs in to your app.
+    ZegoUIKitPrebuiltCallInvitationService().init(
+      appID: ApiKey.AppID /*input your AppID*/,
+      appSign: ApiKey.AppSign /*input your AppSign*/,
+      userID: FirebaseAuth.instance.currentUser!.uid,
+      userName: FirebaseAuth.instance.currentUser!.displayName!,
+      plugins: [ZegoUIKitSignalingPlugin()],
+    );
   }
 
   static Future<String> signUp(

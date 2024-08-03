@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 
 class Chat extends StatelessWidget {
   const Chat({super.key});
@@ -18,14 +19,48 @@ class Chat extends StatelessWidget {
             .selectConversation!
             .name!),
         actions: [
-          IconButton(
-            icon: SvgPicture.asset(Assets.imageVideo),
-            onPressed: () {},
+          ZegoSendCallInvitationButton(
+            isVideoCall: false,
+            iconSize: Size(30, 30),
+
+            icon: ButtonIcon(
+                backgroundColor: Colors.white,
+                icon: SvgPicture.asset(Assets.imageCallMessage)),
+            //You need to use the resourceID that you created in the subsequent steps.
+            //Please continue reading this document.
+            resourceID: "ChatBox",
+            invitees: [
+              ZegoUIKitUser(
+                id: Provider.of<UserProvider>(context, listen: false)
+                    .selectConversation!
+                    .receiverId!,
+                name: Provider.of<UserProvider>(context, listen: false)
+                    .selectConversation!
+                    .name!,
+              ),
+            ],
           ),
-          IconButton(
-            icon: SvgPicture.asset(Assets.imageCallMessage),
-            onPressed: () {},
-          )
+          ZegoSendCallInvitationButton(
+            isVideoCall: true,
+            iconSize: Size(30, 30),
+
+            icon: ButtonIcon(
+                backgroundColor: Colors.white,
+                icon: SvgPicture.asset(Assets.imageVideo)),
+            //You need to use the resourceID that you created in the subsequent steps.
+            //Please continue reading this document.
+            resourceID: "ChatBox",
+            invitees: [
+              ZegoUIKitUser(
+                id: Provider.of<UserProvider>(context, listen: false)
+                    .selectConversation!
+                    .receiverId!,
+                name: Provider.of<UserProvider>(context, listen: false)
+                    .selectConversation!
+                    .name!,
+              ),
+            ],
+          ),
         ],
       ),
       body: ChatBody(),
