@@ -9,6 +9,10 @@ class Assets {
   /// assets/image/Call.svg
   static const String imageCall = "assets/image/Call.svg";
 
+  /// Assets for imageCallMessage
+  /// assets/image/CallMessage.svg
+  static const String imageCallMessage = "assets/image/CallMessage.svg";
+
   /// Assets for imageEllipse
   /// assets/image/Ellipse.svg
   static const String imageEllipse = "assets/image/Ellipse.svg";
@@ -48,5 +52,9 @@ class Assets {
   /// Assets for imageUser
   /// assets/image/user.svg
   static const String imageUser = "assets/image/user.svg";
+
+  /// Assets for imageVideo
+  /// assets/image/video.svg
+  static const String imageVideo = "assets/image/video.svg";
 }
 
