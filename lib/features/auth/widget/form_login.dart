@@ -47,7 +47,10 @@ class _FormLoginState extends State<FormLogin> {
                 error: "Enter Your Password",
                 obscuer: true,
               ),
-              const Expanded(child: SizedBox()),
+              const Expanded(
+                  child: SizedBox(
+                height: 15,
+              )),
               CustomBottom(
                 func: () async {
                   if (_formKey.currentState!.validate()) {

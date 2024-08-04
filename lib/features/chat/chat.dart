@@ -14,15 +14,19 @@ class Chat extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         centerTitle: true,
         title: Text(Provider.of<UserProvider>(context, listen: false)
             .selectConversation!
             .name!),
         actions: [
           ZegoSendCallInvitationButton(
+            onPressed: (code, message, p2) {
+              print("Call invitation sent to: ${p2.map((e) => e).join(", ")}");
+            },
             isVideoCall: false,
             iconSize: Size(30, 30),
-
+            margin: EdgeInsets.all(0),
             icon: ButtonIcon(
                 backgroundColor: Colors.white,
                 icon: SvgPicture.asset(Assets.imageCallMessage)),
@@ -40,27 +44,27 @@ class Chat extends StatelessWidget {
               ),
             ],
           ),
-          ZegoSendCallInvitationButton(
-            isVideoCall: true,
-            iconSize: Size(30, 30),
+          //   ZegoSendCallInvitationButton(
+          //     isVideoCall: true,
+          //     iconSize: Size(30, 30),
 
-            icon: ButtonIcon(
-                backgroundColor: Colors.white,
-                icon: SvgPicture.asset(Assets.imageVideo)),
-            //You need to use the resourceID that you created in the subsequent steps.
-            //Please continue reading this document.
-            resourceID: "ChatBox",
-            invitees: [
-              ZegoUIKitUser(
-                id: Provider.of<UserProvider>(context, listen: false)
-                    .selectConversation!
-                    .receiverId!,
-                name: Provider.of<UserProvider>(context, listen: false)
-                    .selectConversation!
-                    .name!,
-              ),
-            ],
-          ),
+          //     icon: ButtonIcon(
+          //         backgroundColor: Colors.white,
+          //         icon: SvgPicture.asset(Assets.imageVideo)),
+          //     //You need to use the resourceID that you created in the subsequent steps.
+          //     //Please continue reading this document.
+          //     resourceID: "ChatBox",
+          //     invitees: [
+          //       ZegoUIKitUser(
+          //         id: Provider.of<UserProvider>(context, listen: false)
+          //             .selectConversation!
+          //             .receiverId!,
+          //         name: Provider.of<UserProvider>(context, listen: false)
+          //             .selectConversation!
+          //             .name!,
+          //       ),
+          //     ],
+          //   ),
         ],
       ),
       body: ChatBody(),

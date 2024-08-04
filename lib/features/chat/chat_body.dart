@@ -59,7 +59,7 @@ class _ChatBodyState extends State<ChatBody> {
             ),
             Expanded(
               child: Consumer<ChatProvider>(builder: (context, chat, child) {
-                List<Message>? messages = chat.selectChat?.messages;
+                List<MessageModel>? messages = chat.selectChat?.messages;
                 if (messages != null && messages.isNotEmpty) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     _scrollToBottom();
@@ -106,7 +106,7 @@ class _ChatBodyState extends State<ChatBody> {
           onSend: (value) {
             var chat = Provider.of<ChatProvider>(context, listen: false);
             var user = Provider.of<UserProvider>(context, listen: false);
-            Message message = Message(
+            MessageModel message = MessageModel(
                 message: value,
                 type: 'text',
                 senderID: FirebaseAuth.instance.currentUser!.uid,

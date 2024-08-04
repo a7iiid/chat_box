@@ -69,7 +69,7 @@ class DbService {
   }
 
   Future<void> sendMessage(
-      Message message, String chatId, BuildContext context) async {
+      MessageModel message, String chatId, BuildContext context) async {
     try {
       var selectConversation =
           Provider.of<UserProvider>(context, listen: false).selectConversation;

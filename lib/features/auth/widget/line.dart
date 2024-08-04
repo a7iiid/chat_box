@@ -10,7 +10,7 @@ class Line extends StatelessWidget {
     return Opacity(
       opacity: 0.50,
       child: Container(
-        width: 132,
+        width: MediaQuery.sizeOf(context).width * .35,
         decoration: const ShapeDecoration(
           shape: RoundedRectangleBorder(
             side: BorderSide(

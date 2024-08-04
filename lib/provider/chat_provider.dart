@@ -55,7 +55,7 @@ class ChatProvider with ChangeNotifier {
   }
 
   Future<void> sendMessage(
-      Message message, String chatId, BuildContext context) async {
+      MessageModel message, String chatId, BuildContext context) async {
     status = ChatStatus.sendingMessage;
     notifyListeners();
     try {

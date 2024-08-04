@@ -1,10 +1,10 @@
-import 'package:chat_app/provider/Home_provider.dart';
+import 'package:chat_app/main.dart';
 import 'package:chat_app/servise/auth_user.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../provider/user_provider.dart';
-import 'view/recent_message.dart';
+import '../../provider/Home_provider.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -16,8 +16,10 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   void initState() {
-    AuthUser.onUserLogin();
     super.initState();
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    setupFirestoreListener(userId);
+    AuthUser.onUserLogin();
   }
 
   @override
